@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="space-y-16">
+    <section>
+        <h2 class="text-3xl font-semibold mb-8 text-stone-900">Recent Martyrs</h2>
+        {% if martyrs %}
+            <div class="space-y-6">
+                {% for martyr in martyrs %}
+                <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-2xl font-semibold text-stone-900">{{ martyr.name }}</h3>
+                        <span class="text-stone-600 text-sm">{{ martyr.country }}</span>
+                    </div>
+                    <p class="text-stone-500 text-sm mb-3">{{ martyr.date|date:"F j, Y" }}</p>
+                    <p class="text-stone-700 leading-relaxed mb-4">{{ martyr.description }}</p>
+                    {% if martyr.source_url %}
+                    <a href="{{ martyr.source_url }}" target="_blank" rel="noopener noreferrer" class="text-stone-600 hover:text-stone-900 text-sm underline">
+                        Source
+                    </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="mt-8 flex justify-center items-center space-x-2">
+                {% if martyrs.has_previous %}
+                    <a href="?page={{ martyrs.previous_page_number }}{% if request.GET.prayer_page %}&prayer_page={{ request.GET.prayer_page }}{% endif %}" class="px-4 py-2 bg-stone-200 text-stone-800 rounded hover:bg-stone-300">Previous</a>
+                {% endif %}
+                <span class="text-stone-600">Page {{ martyrs.number }} of {{ martyrs.paginator.num_pages }}</span>
+                {% if martyrs.has_next %}
+                    <a href="?page={{ martyrs.next_page_number }}{% if request.GET.prayer_page %}&prayer_page={{ request.GET.prayer_page }}{% endif %}" class="px-4 py-2 bg-stone-200 text-stone-800 rounded hover:bg-stone-300">Next</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <p class="text-stone-600 italic">No martyrs recorded yet.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2 class="text-3xl font-semibold mb-8 text-stone-900">Prayer Intentions</h2>
+        {% if prayer_intentions %}
+            <div class="space-y-6">
+                {% for intention in prayer_intentions %}
+                <div class="bg-white rounded-lg shadow-sm border border-stone-200 p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-stone-900 mb-3">{{ intention.title }}</h3>
+                    <p class="text-stone-600 text-sm mb-4">{{ intention.created_at|date:"F j, Y" }}</p>
+                    <p class="text-stone-700 leading-relaxed">{{ intention.details }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="mt-8 flex justify-center items-center space-x-2">
+                {% if prayer_intentions.has_previous %}
+                    <a href="?prayer_page={{ prayer_intentions.previous_page_number }}{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="px-4 py-2 bg-stone-200 text-stone-800 rounded hover:bg-stone-300">Previous</a>
+                {% endif %}
+                <span class="text-stone-600">Page {{ prayer_intentions.number }} of {{ prayer_intentions.paginator.num_pages }}</span>
+                {% if prayer_intentions.has_next %}
+                    <a href="?prayer_page={{ prayer_intentions.next_page_number }}{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}" class="px-4 py-2 bg-stone-200 text-stone-800 rounded hover:bg-stone-300">Next</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <p class="text-stone-600 italic">No prayer intentions yet.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
+
